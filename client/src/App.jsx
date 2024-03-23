@@ -7,7 +7,6 @@ import Navbar from "./components/navbar/Navbar";
 import Compose from "./components/Compose";
 import LogIn from './Pages/user/LogIn';
 import SignUp from './Pages/user/SignUp';
-import "./App.css"
 
 function App() {
   return (
