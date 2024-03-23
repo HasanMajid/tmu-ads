@@ -5,26 +5,26 @@ import ItemsForSale from "./Pages/ItemsForSale";
 import Services from "./Pages/Services";
 import Navbar from "./components/navbar/Navbar";
 import Compose from "./components/Compose";
+import LogIn from './Pages/user/LogIn';
+import SignUp from './Pages/user/SignUp';
+import "./App.css"
 
 function App() {
   return (
     <BrowserRouter>
       <Navbar />
-      <Link to="/" style={{ marginInline: "1rem" }}>Home </Link>
+      <main>
 
-      <Link to="/items-wanted" style={{ marginInline: "1rem" }}>Items Wanted</Link>
-
-      <Link to="/items-for-sale" style={{ marginInline: "2rem" }}>Items for Sale</Link>
-
-      <Link to="/services" style={{ marginInline: "1rem" }}>Services</Link>
-
-      <Routes>
-        <Route exact path="/" element={<Home />} />
-        <Route path="/items-wanted" element={<ItemsWanted />} />
-        <Route path="/items-for-sale" element={<ItemsForSale />} />
-        <Route path="/services" element={<Services />} />
-      </Routes>
-      <Compose />
+        <Routes>
+          <Route exact path="/" element={<Home />} />
+          <Route path="/items-wanted" element={<ItemsWanted />} />
+          <Route path="/items-for-sale" element={<ItemsForSale />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/login" element={<LogIn />} />
+          <Route path="/signup" element={<SignUp />} />
+        </Routes>
+        <Compose />
+      </main>
     </BrowserRouter>
   )
 }

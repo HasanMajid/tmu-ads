@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box, Flex, Heading } from "@chakra-ui/react"
-import AdCard from "../components/Card/AdCard"
+import AdCard from "../components/card/AdCard"
 
 function Services() {
     return (

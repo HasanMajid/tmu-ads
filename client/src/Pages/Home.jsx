@@ -1,12 +1,12 @@
 import { Box, Flex, Heading } from "@chakra-ui/react"
-import AdCard from "../components/Card/AdCard"
+import AdCard from "../components/card/AdCard"
 
 function Home() {
     return (
         <>
             <Box className="row" marginTop={"2rem"}>
                 <Heading>Items for Sale</Heading>
-                <Flex>
+                <Flex wrap={"wrap"}>
                     <AdCard />
                     <AdCard />
                     <AdCard />
