@@ -1,4 +1,5 @@
 import React from "react";
+import { useState } from "react";
 import {
     Button,
     FormControl,
@@ -8,11 +9,27 @@ import {
     Input,
     Flex,
     Heading,
-    Text
+    Text,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { url } from "../../utils/constans";
 
 function LogIn() {
+    const [email, setEmail] = useState(null);
+    const [password, setPassword] = useState(null);
+
+    //Check database for email and password
+    const handleSubmit = async () => {
+        const res = await axios.get(url + "/user/login", {
+            params: {
+                email: email,
+                password: password
+            }
+        })
+        console.log(res.data)
+    };
+
     return (
         <>
             <Flex
@@ -27,26 +44,44 @@ function LogIn() {
             >
                 <FormControl>
                     <FormLabel marginTop={"2rem"}>Email address</FormLabel>
-                    <Input type="email" />
+                    <Input type="email" onChange={(e) => {
+                        setEmail(e.target.value);
+                    }} />
                     <FormHelperText>We will never share your email.</FormHelperText>
                 </FormControl>
 
                 <FormControl>
                     <FormLabel marginTop={"2rem"}>Password</FormLabel>
-                    <Input type="email" />
+                    <Input type="password" onChange={(e) => {
+                        setPassword(e.target.value);
+                    }}/>
                 </FormControl>
 
-                <Button m={"auto"} marginTop={"1rem"} fontSize={"2rem"} p={"2rem"} maxW={"10rem"}>Log in</Button>
+                <Button
+                    m={"auto"}
+                    marginTop={"1rem"}
+                    fontSize={"2rem"}
+                    p={"2rem"}
+                    maxW={"10rem"}
+                    onClick={handleSubmit}
+                >
+                    Log in
+                </Button>
             </Flex>
 
             <Flex m={"auto"} w={"fit-content"} marginTop={"3rem"} flexDir={"column"}>
                 <Text>Don&apos;t have an account?</Text>
                 <Link to="/signup">
-                    <Button colorScheme='blue' fontSize={"2rem"} p={"1.5rem"}>Sign up</Button>
+                    <Button
+                        colorScheme="blue"
+                        fontSize={"2rem"}
+                        p={"1.5rem"}
+                    >
+                        Sign up
+                    </Button>
                 </Link>
             </Flex>
         </>
-
     );
 }
 
