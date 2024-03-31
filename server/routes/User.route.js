@@ -33,7 +33,7 @@ router.post("/signup", async (req, res) => {
         const newUser = await User.create({email, firstName, lastName, password: hashedPassword})
         return res.status(201).json(newUser);
     } catch {
-        return res.sendStatus(400);
+        return res.sendStatus(500);
     }
 })
 
