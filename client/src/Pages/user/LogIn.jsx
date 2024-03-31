@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { url } from "../../utils/constans";
+import { url } from "../../utils/constants";
 
 function LogIn() {
     const [email, setEmail] = useState(null);
