@@ -8,12 +8,21 @@ const User = mongoose.model('User', userSchema);
 
 router.post("/signup", async (req, res) => {
     console.log("signing up")
-    const {email, firstName, lastName, password} = req.body;
-    
-    // Todo: check email does not already exist in db
+    const { email, firstName, lastName, password } = req.body;
 
-    if (!email || !firstName  || !lastName || !password) {
-        return res.status(400).json({ error: 'Title and content are required' });
+    if (!email.endsWith("@torontomu.ca")) {
+        return res.status(403).json({ error: 'Invalid email domain' });
+    }
+
+    // Todo: check email does not already exist in db
+    if ((await User.find({ email: email })).length !== 0) {
+        return res.status(403).json({ error: 'Email already being used' });
+    }
+
+    console.log(email, firstName, lastName, password)
+
+    if (!email || !firstName || !lastName || !password) {
+        return res.status(403).json({ error: 'All fields are required' });
     }
     
     try {
