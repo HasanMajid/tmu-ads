@@ -24,9 +24,13 @@ router.post("/signup", async (req, res) => {
     if (!email || !firstName || !lastName || !password) {
         return res.status(403).json({ error: 'All fields are required' });
     }
-    
+
+    const salt = await bcrypt.genSalt(10);
+    // hashing the password to store in the database
+    const hashedPassword = await bcrypt.hash(password, salt);
+
     try {
-        const newUser = await User.create({email: "bob@gmail.com", firstName: "bob", lastName: "jones", password: "1234"})
+        const newUser = await User.create({email, firstName, lastName, password: hashedPassword})
         return res.status(201).json(newUser);
     } catch {
         return res.sendStatus(400);
