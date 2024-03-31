@@ -32,8 +32,7 @@ function Navbar() {
                 <Link to="/login">
                     {user ? (
                         <Profile>
-                            {user.name}
-                            {/* This name will be dynamic once we implement login system */}
+                            {user.firstName}
                         </Profile>
                     ) : (
                         <Button>Log In</Button>
