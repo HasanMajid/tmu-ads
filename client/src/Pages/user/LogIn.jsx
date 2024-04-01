@@ -14,20 +14,32 @@ import {
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { url } from "../../utils/constants";
+import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { UserContext } from "../../context/UserContext";
 
 function LogIn() {
     const [email, setEmail] = useState(null);
     const [password, setPassword] = useState(null);
+    const { setUser } = useContext(UserContext);
+    let navigate = useNavigate();
 
     //Check database for email and password
     const handleSubmit = async () => {
-        const res = await axios.get(url + "/user/login", {
+        axios.get(url + "/user/login", {
             params: {
                 email: email,
                 password: password
             }
+        }).then((res) => {
+            // Handle success
+            console.log(res.data);
+            setUser(res.data);
+            navigate("/");
+        }).catch(err => {
+            console.log(err.response.data.error)
+            alert(err.response.data.error);
         })
-        console.log(res.data)
     };
 
     return (

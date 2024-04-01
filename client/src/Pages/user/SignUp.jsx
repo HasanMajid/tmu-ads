@@ -8,22 +8,34 @@ import {
     Input,
     Flex,
 } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { UserContext } from "../../context/UserContext";
 import axios from 'axios';
-import { url } from "../../utils/constans";
+import { url } from "../../utils/constants";
 
 function SignUp() {
     const [email, setEmail] = useState(null);
-    const [first, setFirst] = useState(null);
-    const [last, setLast] = useState(null);
+    const [firstName, setFirstName] = useState(null);
+    const [lastName, setLastName] = useState(null);
     const [password, setPassword] = useState(null);
+    const { setUser } = useContext(UserContext);
+    let navigate = useNavigate();
 
     const handleSubmit = async () => {
-        await axios.post(url + "/user/signup", {
+        axios.post(url + "/user/signup", {
             email,
-            first,
-            last,
+            firstName,
+            lastName,
             password
-        })
+        }).then((res) => {
+            // Handle success
+            console.log(res.data);
+            setUser(res.data);
+            navigate("/");
+        }).catch(err => {
+            alert(err.response.data.error);
+        });
     }
 
     return (
@@ -46,29 +58,21 @@ function SignUp() {
                     }}
                 />
                 <FormHelperText>We will never share your email.</FormHelperText>
-            </FormControl>
 
-            <FormControl>
                 <FormLabel marginTop={"2rem"}>First Name</FormLabel>
                 <Input
-                    type="text"
                     onChange={(e) => {
-                        setFirst(e.target.value);
+                        setFirstName(e.target.value);
                     }}
                 />
-            </FormControl>
 
-            <FormControl>
                 <FormLabel marginTop={"2rem"}>Last Name</FormLabel>
                 <Input
-                    type="text"
                     onChange={(e) => {
-                        setLast(e.target.value);
+                        setLastName(e.target.value);
                     }}
                 />
-            </FormControl>
 
-            <FormControl>
                 <FormLabel marginTop={"2rem"}>Password</FormLabel>
                 <Input
                     type="password"
