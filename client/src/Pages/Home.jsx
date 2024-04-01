@@ -3,6 +3,7 @@ import { Box, Flex, Heading } from "@chakra-ui/react"
 import AdCard from "../components/card/AdCard"
 import axios from 'axios'
 import { url } from '../utils/constants'
+import AdColumn from '../components/card/AdColumn'
 
 function Home() {
     const [ads, setAds] = useState([])
@@ -23,13 +24,7 @@ function Home() {
     }, [])
 
     return (
-        <Box marginTop={"2rem"}>
-            <Flex >
-                {ads.map((ad) =>
-                    <AdCard adPost={ad} key={ad._id} />
-                )}
-            </Flex>
-        </Box>
+        <AdColumn ads={ads} />
     )
 }
 

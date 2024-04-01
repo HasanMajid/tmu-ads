@@ -3,10 +3,9 @@ import { Box, Flex, Heading } from "@chakra-ui/react"
 import AdCard from "../components/card/AdCard"
 import axios from 'axios'
 import { url } from '../utils/constants'
-
+import AdColumn from '../components/card/AdColumn'
 
 function ItemsForSale() {
-
     const [ads, setAds] = useState([])
 
     useEffect(() => {
@@ -25,14 +24,7 @@ function ItemsForSale() {
     }, [])
 
     return (
-        <Box marginTop={"2rem"}>
-            <Heading>Items for Sale</Heading>
-            <Flex >
-                {ads.map((ad) =>
-                    <AdCard adPost={ad} key={ad._id} />
-                )}
-            </Flex>
-        </Box>
+        <AdColumn ads={ads} />
     )
 }
 
