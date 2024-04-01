@@ -1,7 +1,7 @@
 import { Button, Box } from "@chakra-ui/react";
 
 
-function Profile({children ="Profile"}) {
+function Profile({children}) {
     return (
         <Box >
           <Button colorScheme='teal' variant='outline' 
