@@ -16,6 +16,10 @@ router.post("/", async (req, res) => {
     const { title, content, image, type, email } = req.body;
     console.log(title, email);
 
+    if (!title || !content || !type) {
+        return res.status(403).json({ error: 'All fields are required' });
+    }
+
     try {
         const ad = await Post.create({ title, content, image, type, userEmail: email })
         res.status(201).json({ message: "Ad successfully posted" })

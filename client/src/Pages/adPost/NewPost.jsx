@@ -81,8 +81,8 @@ export default function NewPost() {
                 alert("Post submitted successfully!");
             })
             .catch((err) => {
-                alert(err.message);
-                console.log(`ERROR`);
+                alert(err.response.data.error);
+                console.log(err);
             });
     };
 
