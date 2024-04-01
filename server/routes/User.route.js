@@ -1,6 +1,8 @@
 const express = require("express")
 const router = express.Router()
 const mongoose = require('mongoose'); //Import mongoDB
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 
 
 const userSchema = new mongoose.Schema({ email: String, firstName: String, lastName: String, password: String });
@@ -30,7 +32,7 @@ router.post("/signup", async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     try {
-        const newUser = await User.create({email, firstName, lastName, password: hashedPassword})
+        const newUser = await User.create({ email, firstName, lastName, password: hashedPassword })
         return res.status(201).json(newUser);
     } catch {
         return res.sendStatus(500);
@@ -38,19 +40,30 @@ router.post("/signup", async (req, res) => {
 })
 
 router.get("/login", async (req, res) => {
-    res.send("Logged in")
-    const {email, password} = req.query;
-    console.log(email, password)
-    
+    const { email, password } = req.query;
+    console.log("checking logging in user");
+
     if (!email || !password) {
-        return res.status(400).json({ error: 'Title and content are required' });
+        return res.status(400).json({ error: 'All fields are required' });
     }
 
-    try{
-        const user = await User.find({email: email, password: password})
+
+    try {
+        //User could be empty, so need to check with if statement
+        const user = (await User.find({ email: email }))[0]
         console.log(user)
-        return res.json(user)
-    } catch{
+        if (user) {
+            const isCorrectPassword = bcrypt.compare(password, user.password);
+            if (isCorrectPassword) {
+                return res.json(user)
+            } else {
+                return res.status(400).json({ error: "Wrong Password" })
+            }
+        } else {
+            return res.status(400).json({ error: "Email does not exist." })
+        }
+    } catch {
+        console.log("error logging in user")
         return res.status(400);
     }
 
