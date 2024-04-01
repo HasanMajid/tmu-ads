@@ -7,6 +7,8 @@ import Navbar from "./components/navbar/Navbar";
 import Compose from "./components/Compose";
 import LogIn from './Pages/user/LogIn';
 import SignUp from './Pages/user/SignUp';
+import NewPost from './Pages/adPost/NewPost';
+
 
 function App() {
   return (
@@ -21,6 +23,7 @@ function App() {
           <Route path="/services" element={<Services />} />
           <Route path="/login" element={<LogIn />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/newpost" element={<NewPost />} />
         </Routes>
         <Compose />
       </main>
