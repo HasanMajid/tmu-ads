@@ -1,4 +1,3 @@
-import React from 'react'
 import { useEffect, useState } from 'react'
 import { Box, Flex, Heading } from "@chakra-ui/react"
 import AdCard from "../components/card/AdCard"
