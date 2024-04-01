@@ -25,15 +25,31 @@ router.post("/", async (req, res) => {
 })
 
 router.get("/", async (req, res) => {
-    //Get all ads from database
-    try{
-        Post.find({}).then(data =>{
+    //Get all ads from database based
+    try {
+        Post.find({}).then(data => {
             res.json(data)
-        }).catch(err =>{
-            res.status(408).json({message : err.message})
+        }).catch(err => {
+            res.status(408).json({ message: err.message })
         })
-    }catch(err){
-        res.json({message : err.message})
+    } catch (err) {
+        res.json({ message: err.message })
+    }
+})
+
+router.get("/:type", async (req, res) => {
+    const type = req.params.type;
+    console.log(type)
+    //Get all ads from database based on type
+
+    try {
+        Post.find({ type }).then(data => {
+            res.json(data)
+        }).catch(err => {
+            res.status(408).json({ message: err.message })
+        })
+    } catch (err) {
+        res.json({ message: err.message })
     }
 })
 
