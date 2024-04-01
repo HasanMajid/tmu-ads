@@ -4,6 +4,7 @@ const app = express();
 const port = process.env.PORT || 8000;
 
 const userRoute = require("./routes/User.route");
+const adPostRoute = require("./routes/AdPost.route");
 
 // Middleware to parse JSON requests
 app.use(express.json());
@@ -16,6 +17,7 @@ app.use(cors({
 }))
 
 app.use("/user", userRoute);
+app.use("/adpost", adPostRoute);
 
 
 //Connect to MongoDB
