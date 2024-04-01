@@ -7,7 +7,8 @@ import {
   Image,
   Stack,
   Text,
-  Button
+  Button,
+  Box,
 } from "@chakra-ui/react";
 
 function AdCard({ adPost }) {
@@ -16,48 +17,49 @@ function AdCard({ adPost }) {
   }
   return (
     <Card
-        cursor={"pointer"}
-        boxShadow={"-2px 2px 4px 2px gray"}
-        colorScheme=""
-        maxWidth={"17rem"}
-        marginInline={"1rem"}
-        padding={"auto"}
+      direction={{ base: "column", sm: "row" }}
+      overflow="hidden"
+      variant="outline"
+      cursor={"pointer"}
+      boxShadow={"-2px 2px 4px 2px gray"}
+      marginInline={"1rem"}
+      padding={"auto"}
     >
-        <CardHeader>
-            <Heading fontSize={"2rem"}>{adPost?.title}</Heading>
-            <p>{adPost?.userEmail}</p>
-        </CardHeader>
+      <Image
+        // objectFit="cover"
+        w={'fit-content'}
+        maxW={"10rem"}
+        m={"auto"}
+        // maxW={{ base: "100%", sm: "200px" }}
+        src={adPost?.image}
+        alt="Caffe Latte"
+      />
+
+      <Stack>
         <CardBody>
-            <Image
-                objectFit="cover"
-                w={"fit-content"}
-                m={"auto"}
-                maxW={{ base: "100%", sm: "200px" }}
-                src={adPost?.image}
-                alt="Caffe Latte"
-            />
-            {adPost?.content}
+          <Heading size="lg">{adPost?.title}</Heading>
+          <p>{adPost?.userEmail}</p>
+
+          <Text py="2">{adPost?.content}</Text>
+          <Box
+            borderRadius={"2rem"}
+            backgroundColor={"gray"}
+            color={"white"}
+            w={"fit-content"}
+            p={"0.4rem"}
+            fontWeight={"bold"}
+          >
+            {adPost?.type}
+          </Box>
         </CardBody>
+
+        <CardFooter>
+          <Button variant="solid" colorScheme="blue">
+            Message
+          </Button>
+        </CardFooter>
+      </Stack>
     </Card>
-
-    // <Card>
-    //   <Stack>
-    //     <CardBody>
-    //       <Heading size="md">The perfect latte</Heading>
-
-    //       <Text py="2">
-    //         Caffè latte is a coffee beverage of Italian origin made with
-    //         espresso and steamed milk.
-    //       </Text>
-    //     </CardBody>
-
-    //     <CardFooter>
-    //       <Button variant="solid" colorScheme="blue">
-    //         Buy Latte
-    //       </Button>
-    //     </CardFooter>
-    //   </Stack>
-    // </Card>
   );
 }
 
