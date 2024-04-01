@@ -75,9 +75,7 @@ export default function NewPost() {
             .then((res) => {
                 // Handle success
                 console.log(res.data);
-                setUser(res.data);
                 navigate("/");
-                console.log(`SUCCESS`);
                 alert("Post submitted successfully!");
             })
             .catch((err) => {
