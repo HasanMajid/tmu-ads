@@ -8,9 +8,12 @@ import Compose from "./components/Compose";
 import LogIn from './Pages/user/LogIn';
 import SignUp from './Pages/user/SignUp';
 import NewPost from './Pages/adPost/NewPost';
-
+import { useContext } from "react";
+import { UserContext } from './context/UserContext';
 
 function App() {
+  const { user } = useContext(UserContext);
+
   return (
     <BrowserRouter>
       <Navbar />
@@ -25,7 +28,10 @@ function App() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/newpost" element={<NewPost />} />
         </Routes>
-        <Compose />
+
+
+        {user && <Compose />}
+
       </main>
     </BrowserRouter>
   )
