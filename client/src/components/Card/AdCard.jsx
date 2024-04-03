@@ -24,6 +24,7 @@ function AdCard({ adPost }) {
       boxShadow={"-2px 2px 4px 2px gray"}
       marginInline={"1rem"}
       padding={"auto"}
+      maxW={"50rem"}
     >
       <Image
         // objectFit="cover"

@@ -6,9 +6,9 @@ function AdColumn({ ads }) {
     return (
         <Box marginTop={"2rem"}>
             <Heading></Heading>
-            <Flex flexDir={"column"}>
+            <Flex flexDir={"column"} w={'fit-content'} justifyContent={'center'}>
                 {ads.map((ad) =>
-                    <Flex key={ad._id} marginTop={"2rem"}>
+                    <Flex key={ad._id} marginTop={"2rem"} w={'fit-content'} >
                         <AdCard adPost={ad} />
                     </Flex>
                 )}
