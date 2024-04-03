@@ -27,7 +27,7 @@ function Services() {
         <>
             <SearchBar />
             <Heading>Services</Heading>
-            <AdColumn ads={ads} />
+            <AdColumn ads={ads} setAds={setAds}/>
         </>
     )
 }

@@ -27,7 +27,7 @@ function Home() {
         <>
             <SearchBar />
             <Heading>Home</Heading>
-            <AdColumn ads={ads} />
+            <AdColumn ads={ads} setAds={setAds}/>
         </>
     )
 }

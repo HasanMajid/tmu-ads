@@ -27,7 +27,7 @@ function ItemsForSale() {
         <>
             <SearchBar />
             <Heading>Items for Sale</Heading>
-            <AdColumn ads={ads} />
+            <AdColumn ads={ads} setAds={setAds}/>
         </>
     )
 }

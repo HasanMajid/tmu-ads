@@ -8,7 +8,21 @@ const bcrypt = require("bcrypt");
 const userSchema = new mongoose.Schema({ title: String, userEmail: String, content: String, image: String, type: String });
 const Post = mongoose.model('Post', userSchema);
 
-//TODO: Make sure Post AD is available when logged in 
+//TODO: Handle deleting Ad from database
+router.post("/delete", async (req, res) => {
+    const { _id, title } = req.body;
+    console.log('Deleting', title, _id)
+
+    try {
+        await Post.deleteOne({ _id: _id });
+        res.status(201).json({ message: "Ad successfully deleted" })
+    } catch (err) {
+        console.log(err)
+        return res.status(500).json({ error: 'Error deleting ad' });
+    }
+})
+
+
 
 router.post("/", async (req, res) => {
     //Store ads into database

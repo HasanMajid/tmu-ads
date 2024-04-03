@@ -29,7 +29,7 @@ function SearcResults() {
         <>
             <SearchBar />
             <Heading>Search Results</Heading>
-            <AdColumn ads={ads} />
+            <AdColumn ads={ads} setAds={setAds}/>
         </>
     )
 }

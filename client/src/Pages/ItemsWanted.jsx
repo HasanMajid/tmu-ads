@@ -27,7 +27,7 @@ function ItemsWanted() {
         <>
             <SearchBar />
             <Heading>Items Wanted</Heading>
-            <AdColumn ads={ads} />
+            <AdColumn ads={ads} setAds={setAds}/>
         </>
     )
 }

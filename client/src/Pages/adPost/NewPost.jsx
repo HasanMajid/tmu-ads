@@ -59,9 +59,6 @@ export default function NewPost() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const formData = new FormData();
-
-        formData.append("title", title);
-        formData.append("content", content);
         //TO DO
         //NEED TO ADD IMAGE
         axios
