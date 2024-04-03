@@ -24,7 +24,7 @@ function Navbar() {
                     <Heading as={"h1"}>TMU ADS</Heading>
                 </Box>
                 <Box m={"auto"}>
-                    <Input variant="filled" placeholder="Search" />
+                    
                 </Box>
                 <Flex marginRight={"1rem"} gap={"2rem"}>
                     <Button onClick={toggleColorMode}>Toggle Theme</Button>
