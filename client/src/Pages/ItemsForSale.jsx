@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { Box, Flex, Heading } from "@chakra-ui/react"
-import AdCard from "../components/card/AdCard"
 import axios from 'axios'
 import { url } from '../utils/constants'
 import AdColumn from '../components/card/AdColumn'
