@@ -17,7 +17,7 @@ function App() {
   return (
     <BrowserRouter>
       <Navbar />
-      <main>
+      <main style={{paddingInline: "12rem"}}>
 
         <Routes>
           <Route exact path="/" element={<Home />} />
