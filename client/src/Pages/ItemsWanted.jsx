@@ -4,6 +4,7 @@ import AdCard from "../components/card/AdCard"
 import axios from 'axios'
 import { url } from '../utils/constants'
 import AdColumn from '../components/card/AdColumn'
+import SearchBar from '../components/search/SearchBar'
 
 function ItemsWanted() {
     const [ads, setAds] = useState([])
@@ -24,7 +25,11 @@ function ItemsWanted() {
     }, [])
 
     return (
-        <AdColumn ads={ads} />
+        <>
+            <SearchBar />
+            <Heading>Items Wanted</Heading>
+            <AdColumn ads={ads} />
+        </>
     )
 }
 

@@ -4,6 +4,7 @@ import AdCard from "../components/card/AdCard"
 import axios from 'axios'
 import { url } from '../utils/constants'
 import AdColumn from '../components/card/AdColumn'
+import SearchBar from '../components/search/SearchBar'
 
 function Services() {
     const [ads, setAds] = useState([])
@@ -24,7 +25,11 @@ function Services() {
     }, [])
 
     return (
-        <AdColumn ads={ads} />
+        <>
+            <SearchBar />
+            <Heading>Services</Heading>
+            <AdColumn ads={ads} />
+        </>
     )
 }
 
