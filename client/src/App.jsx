@@ -8,6 +8,7 @@ import Compose from "./components/Compose";
 import LogIn from './Pages/user/LogIn';
 import SignUp from './Pages/user/SignUp';
 import NewPost from './Pages/adPost/NewPost';
+import SearcResults from './Pages/adPost/SearchResults';
 import { useContext } from "react";
 import { UserContext } from './context/UserContext';
 
@@ -27,6 +28,7 @@ function App() {
           <Route path="/login" element={<LogIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/newpost" element={<NewPost />} />
+          <Route path="/searchresults" element={<SearcResults />} />
         </Routes>
 
 
