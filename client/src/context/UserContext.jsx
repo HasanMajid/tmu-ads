@@ -6,7 +6,10 @@ export default function UserContextProvider({ children }) {
     const [user, setUser] = useState(null);
 
     useEffect(() => {
-
+        const userCheck = localStorage.getItem("user");
+        if (userCheck) {
+            setUser(JSON.parse(userCheck));
+        }
     }, [])
 
     const values = {

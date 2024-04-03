@@ -34,8 +34,11 @@ function LogIn() {
         }).then((res) => {
             // Handle success
             console.log(res.data);
-            setUser(res.data);
-            navigate("/");
+            if (res.data) {
+                setUser(res.data);
+                localStorage.setItem("user", JSON.stringify(res.data));
+                navigate("/");
+            }
         }).catch(err => {
             console.log(err.response.data.error)
             alert(err.response.data.error);
@@ -66,7 +69,7 @@ function LogIn() {
                     <FormLabel marginTop={"2rem"}>Password</FormLabel>
                     <Input type="password" onChange={(e) => {
                         setPassword(e.target.value);
-                    }}/>
+                    }} />
                 </FormControl>
 
                 <Button

@@ -32,7 +32,11 @@ function SignUp() {
             // Handle success
             console.log(res.data);
             setUser(res.data);
-            navigate("/");
+            if (res.data) {
+                setUser(res.data);
+                localStorage.setItem("user", JSON.stringify(res.data));
+                navigate("/");
+            }
         }).catch(err => {
             alert(err.response.data.error);
         });
