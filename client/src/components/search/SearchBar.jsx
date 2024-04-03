@@ -15,7 +15,9 @@ function SearchBar() {
         <option>Item for Sale</option>
         <option>Services</option>
       </Select>
-      <Button p={"1rem"}>Search</Button>
+      <Flex>
+        <Button p={"1rem"}>Search</Button>
+      </Flex>
     </Flex>
   )
 }
