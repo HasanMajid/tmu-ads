@@ -7,6 +7,9 @@ import {
     Input,
     Divider,
     useColorMode,
+    Tab,
+    Tabs,
+    TabList
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { useContext } from "react";
@@ -16,6 +19,7 @@ import Profile from "./Profile";
 function Navbar() {
     const { colorMode, toggleColorMode } = useColorMode();
     const { user } = useContext(UserContext);
+    const linkStyle = { marginInline: "1rem" }
 
     return (
         <nav>
@@ -24,38 +28,45 @@ function Navbar() {
                     <Heading as={"h1"}>TMU ADS</Heading>
                 </Box>
                 <Box m={"auto"}>
-                    
+
                 </Box>
                 <Flex marginRight={"1rem"} gap={"2rem"}>
                     <Button onClick={toggleColorMode}>Toggle Theme</Button>
                 </Flex>
-                <Link to="/login">
-                    {user ? (
-                        <Profile>
-                            {user.firstName}
-                        </Profile>
-                    ) : (
+                {user ? (
+                    <Profile>
+                        {user.firstName}
+                    </Profile>
+                ) : (
+                    <Link to="/login">
                         <Button>Log In</Button>
-                    )}
-                </Link>
+                    </Link>
+                )}
             </Stack>
-            <Stack flexDir={"row"} m={"auto"} w={"fit-content"}>
-                <Link to="/" style={{ marginInline: "1rem" }}>
-                    Home{" "}
-                </Link>
-
-                <Link to="/items-wanted" style={{ marginInline: "1rem" }}>
-                    Items Wanted
-                </Link>
-
-                <Link to="/items-for-sale" style={{ marginInline: "2rem" }}>
-                    Items for Sale
-                </Link>
-
-                <Link to="/services" style={{ marginInline: "1rem" }}>
-                    Services
-                </Link>
-            </Stack>
+            <Tabs>
+                <TabList flexDir={"row"} m={"auto"} w={"fit-content"}>
+                    <Tab>
+                        <Link to="/" style={linkStyle}>
+                            Home
+                        </Link>
+                    </Tab>
+                    <Tab>
+                        <Link to="/items-wanted" style={linkStyle}>
+                            Items Wanted
+                        </Link>
+                    </Tab>
+                    <Tab>
+                        <Link to="/items-for-sale" style={linkStyle}>
+                            Items for Sale
+                        </Link>
+                    </Tab>
+                    <Tab>
+                        <Link to="/services" style={linkStyle}>
+                            Services
+                        </Link>
+                    </Tab>
+                </TabList>
+            </Tabs>
             <Divider />
         </nav>
     );
