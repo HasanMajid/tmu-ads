@@ -29,7 +29,7 @@ router.post("/", async (req, res) => {
 })
 
 router.get("/", async (req, res) => {
-    //Get all ads from database based
+    //Get all ads from database
     try {
         Post.find({}).then(data => {
             res.json(data)
@@ -58,10 +58,29 @@ router.get("/:type", async (req, res) => {
 })
 
 
+router.get("/search/:search/:type", async (req, res) => {
+    const type = req.params.type;
+    const search = req.params.search;
+    //Search for ads
 
-//TODO: Search feature
-router.get("/searchAd", async (req, res) => {
-    //maybe for search functionality?
+
+    let fields;
+    if (type === "All") {
+        fields = { $or: [{ title: { $regex: search, $options: 'i' } }, { content: { $regex: search, $options: 'i' } }] }
+    }
+    else {
+        fields = { type, $or: [{ title: { $regex: search, $options: 'i' } }, { content: { $regex: search, $options: 'i' } }] }
+    }
+
+    try {
+        Post.find(fields).then(data => {
+            res.json(data)
+        }).catch(err => {
+            res.status(408).json({ message: err.message })
+        })
+    } catch (err) {
+        res.json({ message: err.message })
+    }
 })
 
 module.exports = router;
