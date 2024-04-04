@@ -43,22 +43,25 @@ function AdCard({ adPost, setAds }) {
 
   const handleSendMessage = async (e) => {
     console.log("Sending message to:", user.id);
-    console.log("SEND MSG TEST", user.email, adPost.userEmail, message);
-
-    axios.
+    console.log("SEND MSG TEST", user.email, adPost.userEmail, message, adPost._id);
+    
+    try {
+      await axios.
       post(url + '/message', {
         senderId: user.email,
         recipientId: adPost.userEmail,
+        adId: adPost.id,
         message: message
-      }).then(() => {
-        console.log("Message sent successfully");
-        alert("Message sent!");
-        console.log(message)
-        //setNewMessage(''); 
-      }).catch(err => {
-        alert("Error sending message");
-        console.log("Error sending message", err);
       });
+
+      console.log("Message sent successfully");
+      alert("Message sent!");
+      console.log(message)
+      setMessage('');
+    } catch (err) {
+      alert("Error sending message");
+      console.log("Error sending message", err);
+    }
   };
 
 
