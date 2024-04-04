@@ -8,7 +8,6 @@ import Compose from "./components/Compose";
 import LogIn from './Pages/user/LogIn';
 import SignUp from './Pages/user/SignUp';
 import NewPost from './Pages/adPost/NewPost';
-import Chatbox from './components/chat/ChatBox';//?
 import SearcResults from './Pages/adPost/SearchResults';
 import Settings from './Pages/user/Settings';
 import { ChakraProvider } from '@chakra-ui/react';//?
@@ -18,7 +17,8 @@ import Messages from './Pages/user/Messages';
 
 function App() {
   const { user } = useContext(UserContext);
-
+  console.log(import.meta.env.VITE_NODE_ENV)
+  
   return (
     <ChakraProvider>
     <BrowserRouter>

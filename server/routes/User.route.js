@@ -69,4 +69,37 @@ router.get("/login", async (req, res) => {
 
 })
 
+
+// Fetch all users
+router.get("/users", async (req, res) => {
+    console.log("fetching all users");
+
+    try {
+        User.find({}).then(data => {
+            return res.json(data)
+        }).catch(err => {
+            return res.status(408).json({ message: err.message })
+        })
+    } catch {
+        console.log("error logging in user")
+        return res.status(400);
+    }
+
+})
+
+
+//TODO: Delete selected user based on email
+router.post("/delete", async (req, res)=>{
+    const { email } = req.body;
+    console.log("deleting user")
+
+    try{
+        await User.deleteOne({email: email})
+        return res.status(201).json({ message: "User successfully deleted" })
+    }catch (err) {
+        console.log(err)
+        return res.status(500).json({ error: 'Error deleting user' });
+    }
+})
+
 module.exports = router;

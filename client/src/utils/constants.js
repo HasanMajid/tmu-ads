@@ -1,1 +1,1 @@
-export const url = "http://localhost:8000"
+export const url = import.meta.env.VITE_NODE_ENV === "production" ? import.meta.env.VITE_URI : import.meta.env.VITE_DEV_URI

@@ -1,23 +1,18 @@
-import React from 'react'
-import { Button, 
-    Box,  
-    Table,
-    Thead,
-    Tbody,
-    Tfoot,
-    Tr,
-    Th,
-    Td,
-    TableCaption,
-    TableContainer} from "@chakra-ui/react";
+import { useEffect, useState } from 'react'
+import { Button} from "@chakra-ui/react";
 import { UserContext } from "../../context/UserContext";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from 'axios';
+import { url } from "../../utils/constants";
+import UserList from './UserList';
 
 function Settings() {
     const {user, setUser} = useContext(UserContext);
     const {admin} = useContext(UserContext);
     const navigate = useNavigate();
+
+    const [users, setUsers] = useState([])
     
     const handleSignOut = () =>{
         setUser(null)
@@ -25,44 +20,30 @@ function Settings() {
         navigate("/")
     }
 
+    //Fetch all users from database
+    useEffect(() => {
+        async function getUsers() {
+            await axios.get(url + '/user/users')
+                .then((res) => {
+                    console.log(res.data);
+                    setUsers(res.data);
+                })
+                .catch(err => {
+                    console.log(err)
+                    alert("error fetching all users")
+                })
+        }
+        getUsers();
+    }, [])
+
+
     return (
         <>
-            <Button onClick={handleSignOut}>
+            {admin && <UserList users={users}></UserList>}
+
+            <Button onClick={handleSignOut} marginTop={"2rem"}>
                 Sign out
             </Button>
-
-            <TableContainer>
-            <Table variant='simple'>
-                <TableCaption>Imperial to metric conversion factors</TableCaption>
-                <Thead>
-                <Tr>
-                    <Th>Email</Th>
-                    <Th>First Name</Th>
-                    <Th>Last Name</Th>
-                </Tr>
-                </Thead>
-
-                <Tbody>
-                <Tr>
-                    <Td>inches</Td>
-                    <Td>millimetres (mm)</Td>
-                    <Td isNumeric>25.4</Td>
-                </Tr>
-                <Tr>
-                    <Td>feet</Td>
-                    <Td>centimetres (cm)</Td>
-                    <Td isNumeric>30.48</Td>
-                </Tr>
-                <Tr>
-                    <Td>yards</Td>
-                    <Td>metres (m)</Td>
-                    <Td isNumeric>0.91444</Td>
-                </Tr>
-                </Tbody>
-
-            </Table>
-            </TableContainer>
-
         </>
     )
 }
