@@ -38,7 +38,6 @@ function App() {
           <Route path="/settings" element={<Settings />} />
         </Routes>
 
-        <Chatbox />
         {user && <Compose />}
       </main>
     </BrowserRouter>
