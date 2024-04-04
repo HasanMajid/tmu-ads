@@ -7,6 +7,7 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
 require('dotenv').config();
+const { MongoClient, ServerApiVersion } = require('mongodb');
 
 const userRoute = require("./routes/User.route");
 const adPostRoute = require("./routes/AdPost.route");
@@ -32,9 +33,26 @@ app.use((req, res, next) => {
     next();
 });
 
+let uri;
+console.log(process.env.NODE_ENV);
+if (process.env.NODE_ENV === "development") {
+    console.log('dev mode')
+    uri = process.env.DEV_URI;
+} else {
+    console.log('prod mode')
+    uri = process.env.URI;
+    console.log(uri)
+}
+
 //Connect to MongoDB
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/tmu-ads', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(uri, {
+    serverApi: {
+        version: ServerApiVersion.v1,
+        strict: true,
+        deprecationErrors: true,
+    }
+});
 
 app.get("/", function (req, res) {
     res.send("Hello World!");
