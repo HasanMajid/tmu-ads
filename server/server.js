@@ -18,7 +18,7 @@ app.use(express.json());
 
 // Add CORS headers (Only allows our domain to access our server)
 app.use(cors({
-    // origin: ["http://localhost:5173", "*"],
+    origin: ["http://localhost:5173", "https://tmu-ads.vercel.app"],
     credentials: true,
     exposedHeaders: ["Authorization", "newToken"]
 }))
