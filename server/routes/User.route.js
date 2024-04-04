@@ -13,7 +13,7 @@ router.post("/signup", async (req, res) => {
     const { email, firstName, lastName, password } = req.body;
 
     if (!email.endsWith("@torontomu.ca")) {
-        return res.status(403).json({ error: 'Invalid email domain' });
+        return res.status(403).json({ error: 'Email domain must be @torontomu.ca' });
     }
 
     // Todo: check email does not already exist in db
