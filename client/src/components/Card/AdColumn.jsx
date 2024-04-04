@@ -3,9 +3,7 @@ import { Flex, Box, Heading } from '@chakra-ui/react'
 import AdCard from './AdCard'
 
 function AdColumn({ ads, setAds }) {
-    useEffect(() => {
-        console.log("ads changed here too")
-    }, [ads])
+
     return (
         <Box marginTop={"2rem"}>
             <Heading></Heading>
