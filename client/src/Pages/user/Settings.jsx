@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Button} from "@chakra-ui/react";
+import { Button, Heading} from "@chakra-ui/react";
 import { UserContext } from "../../context/UserContext";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
@@ -38,8 +38,9 @@ function Settings() {
 
 
     return (
-        <>
-            {admin && <UserList users={users}></UserList>}
+        <>  
+            <Heading marginTop={"2rem"}>Dashboard</Heading>
+            {admin && <UserList users={users} setUsers={setUsers}></UserList>}
 
             <Button onClick={handleSignOut} marginTop={"2rem"}>
                 Sign out
