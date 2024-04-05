@@ -1,30 +1,30 @@
-import { useEffect, useState } from 'react'
-import {Table,
+import {
+    Table,
     Thead,
     Tbody,
     Tr,
     Th,
     Td,
-    TableCaption,
     TableContainer,
-    CloseButton
+    CloseButton,
 } from "@chakra-ui/react";
-import { UserContext } from "../../context/UserContext";
-import { useContext } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { url } from "../../utils/constants";
 
 
-function UserList({ users }) {
+function UserList({ users, setUsers }) {
 
     //Pass the User info you want to delete in the database
     const handleDeleteUser = async (email) => {
         console.log(email)
         axios.post(url + '/user/delete', {
-            email: email 
-        }).then(()=>{
+            email: email
+        }).then(() => {
             console.log('Update list afte delete')
+            setUsers((prevUsers) => {
+                const newUsers = prevUsers.filter(acc => acc.email !== email);
+                return newUsers;
+            })
         }).catch(err => {
             alert("error deleting post")
             console.log("error deleting post")
@@ -34,10 +34,10 @@ function UserList({ users }) {
     return (
         <TableContainer marginTop={"2rem"}>
             <Table variant=''>
-                <TableCaption>User Accounts</TableCaption>
+                {/* <TableCaption>User Accounts</TableCaption> */}
                 <Thead>
                     <Tr>
-                        <Th>Email</Th>
+                        <Th>User Emails</Th>
                         <Th>First Name</Th>
                         <Th>Last Name</Th>
                     </Tr>
@@ -52,7 +52,7 @@ function UserList({ users }) {
                                 <Td>{acc.lastName}</Td>
                                 <Td><CloseButton onClick={() => {
                                     handleDeleteUser(acc.email)
-                                }}/></Td>
+                                }} /></Td>
                             </Tr>
                         ))
                     }
