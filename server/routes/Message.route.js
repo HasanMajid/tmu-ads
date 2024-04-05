@@ -33,7 +33,7 @@ router.post("/", async (req, res) => {
 // Fetches Messages
 router.get("/messages/:adPostId/:sender/:recipient", async (req, res) => {
     const { adPostId, sender, recipient } = req.params;
-    console.log(adPostId, sender, recipient);
+    console.log("Fetching Chat messag",adPostId, sender, recipient);
 
     try {
         const messages = await Message.find({
@@ -57,18 +57,27 @@ router.get("/chats/:userEmail", async (req, res) => {
 
     try {
         const chats = [];
-        const adPostIds = await Message.distinct('adPostId', {
-            $or: [
-                { sender: userEmail },
-                { recipient: userEmail }
-            ]
+        let adPostIds = await Message.distinct('adPostId', {
+            sender: userEmail 
         });
         for (let adPostId of adPostIds) {
             const post = await Post.findOne({ _id: adPostId });
             chats.push({
                 adPostId: adPostId,
                 adPostTitle: post.title,
-                recipient: post.userEmail
+                recipient: post.userEmail,
+            });
+        }
+
+        adPostIds = await Message.distinct('adPostId', {
+            recipient: userEmail 
+        });
+        for (let adPostId of adPostIds) {
+            const post = await Post.findOne({ _id: adPostId });
+            chats.push({
+                adPostId: adPostId,
+                adPostTitle: post.title,
+                recipient: userEmail
             });
         }
         res.status(200).send(chats);
