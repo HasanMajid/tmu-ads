@@ -49,7 +49,7 @@ const mongoose = require('mongoose');
 mongoose.connect(uri, {
     serverApi: {
         version: ServerApiVersion.v1,
-        strict: true,
+        // strict: true,
         deprecationErrors: true,
     }
 });
