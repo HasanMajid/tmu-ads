@@ -1,63 +1,129 @@
-import {
-    Flex,
-    Box,
-    VStack,
-    Text,
-    Input,
-    Button
-} from "@chakra-ui/react";
-import { useState } from "react";
+import { Flex, Box, VStack, Text, Input, Button } from "@chakra-ui/react";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { url } from "../../utils/constants";
+import { useContext } from "react";
+import { UserContext } from "../../context/UserContext";
+import ChatContextProvider from "../../context/ChatContext";
 
 function Messages() {
+    const { user } = useContext(UserContext);
     //Some data for testing functionality, you can delete this once you can access database
-    const [convos] = useState([
-        { id: 1, posttitle: "laptop", name: "mark@torontomu.ca", chat: ["hi"] },
-        { id: 2, posttitle: "study service", name: "huseynov@torontomu.ca", chat: ["hi"] },
-        { id: 3, posttitle: "shoes", name: "alexis@torontomu.ca", chat: ["hi"] }
-    ]);
+    const [chats, setChats] = useState([]);
 
-    const [current_convo, setcurrent_convo] = useState(null);
-    const [message, setMessage] = useState('');
+    const [currentChat, setCurrentChat] = useState(null);
+    const [messages, setMessages] = useState([]);
+    const [message, setMessage] = useState("");
 
-    const handleconvoclick = (convo) => {
-        setcurrent_convo(convo);
-    };
+    //Fetches Chats
+    useEffect(() => {
+        async function getChats() {
+            await axios
+                .get(url + `/message/chats/${user.email}`)
+                .then((res) => {
+                    console.log(res.data);
+                    setChats(res.data);
+                })
+                .catch((err) => {
+                    console.log(err);
+                    alert("error fetching chats of user");
+                });
+        }
+        if (user) {
+            getChats();
+        }
+    }, [user]);
 
-    const handleSendMessage = () => {
-        // Check if message sent
-        console.log("Message sent:", message);
-        // Resent message box
-        setMessage('');
-    };
+    useEffect(() => {
+        const getMessages = async () => {
+            // const recipient = user.email !== currentChat.recipient ? currentChat.recipient : user.email
+            axios
+                .get(url + 
+                    `/message/messages/${currentChat.adPostId}/${user.email}/${currentChat.recipient}`
+                )
+                .then((res) => {
+                    setMessages(res.data)
+                });
+        };
+        if (currentChat && user) {
+            getMessages();
+        }
+    }, [currentChat, user]);
+
+    // const handleSendMessage = async (e) => {
+    //     // Check if message sent
+    //     console.log("Trying to send message in convo");
+
+    //     // try {
+    //     //     await axios.post(url + "/message", {
+    //     //         convoid: current_convo,
+    //     //         message: message,
+    //     //     });
+    //     //     console.log("Message sent successfully in convoid: ", current_convo);
+    //     //     console.log(message);
+    //     //     setMessage("");
+    //     // } catch (err) {
+    //     //     alert("Error sending message in convo.");
+    //     //     console.log("Error sending message", err);
+    //     // }
+
+    //     await axios.
+    //         post(url + '/message', {
+    //             adPostId: adPost._id,
+    //             adPostTitle: adPost.title,
+    //             sender: user.email,
+    //             recipient: adPost.userEmail,
+    //             message: message
+    //         }).then(() => {
+    //             console.log("Message sent successfully");
+    //             alert("Message sent!");
+    //             console.log(message)
+    //             setMessage('');
+    //         }).catch((err) => {
+    //             alert("Error sending message");
+    //             console.log("Error sending message", err);
+    //         })
+    // };
 
     return (
         <Flex>
             {/*Listing the conversations on the left */}
             <VStack align="stretch" borderRight="1px solid #ccc" p={4} minW="200px">
-                <Text fontWeight="bold" mb={4}>Messages</Text>
-                {convos.map((convo) => (
-                    <Box
-                        key={convo.id}
-                        p={2}
-                        cursor="pointer"
-                        _hover={{ bg: "gray.100" }}
-                        onClick={ () => handleconvoclick(convo)}
-                    >
-                        <Text fontWeight="bold">{convo.posttitle}</Text>
-                        {convo.name}
-                    </Box>
-                ))}
+                <Text fontWeight="bold" mb={4}>
+                    Messages
+                </Text>
+                {chats.map(
+                    (
+                        chat // chat contains: recipient, adPostId, adPostTitle
+                    ) => (
+                        <Box
+                            key={chat.adPostId}
+                            p={2}
+                            cursor="pointer"
+                            _hover={{ bg: "gray.100" }}
+                            onClick={() => setCurrentChat(chat)}
+                        >
+                            <Text fontWeight="bold">{chat.adPostTitle}</Text>
+                            <Text>{chat.recipient}</Text>
+                            {chat.sender}
+                        </Box>
+                    )
+                )}
             </VStack>
 
             {/*Box for selected conversation*/}
             <Box flex="1" p={4} position="relative" maxW="800px">
-                {current_convo ? (
+                {currentChat ? (
                     <VStack align="stretch" spacing={4}>
-                        <Text fontWeight="bold" style={{textAlign: "center"}}>{current_convo.name}</Text>
+                        <Text fontWeight="bold" style={{ textAlign: "center" }}>
+                            {currentChat.name}
+                        </Text>
                         <Box style={{ height: "calc(100vh - 300px)", overflowY: "auto" }}>
-                            {current_convo.chat.map((message, index) => (
-                            <Box key={index} p={2} borderRadius="md">{message}</Box>
-                        ))}
+                            {messages.map((message, index) => (
+                                <Box key={message._id} p={2} borderRadius="md">
+                                    {message.message}
+                                </Box>
+                            ))}
                         </Box>
                         {/* The message box and send button */}
                         <Box position="absolute" bottom="0" left="0" right="0" p={4}>
@@ -68,7 +134,7 @@ function Messages() {
                                     onChange={(e) => setMessage(e.target.value)}
                                     placeholder="Type your message..."
                                 />
-                                <Button colorScheme="blue" ml={2} onClick={handleSendMessage}>Send</Button>
+                                {/* <Button colorScheme="blue" ml={2} onClick={handleSendMessage}>Send</Button> */}
                             </Flex>
                         </Box>
                     </VStack>
