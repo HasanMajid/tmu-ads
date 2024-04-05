@@ -74,10 +74,11 @@ router.get("/chats/:userEmail", async (req, res) => {
         });
         for (let adPostId of adPostIds) {
             const post = await Post.findOne({ _id: adPostId });
+            const message = await Message.findOne({ adPostId: adPostId, recipient: userEmail });
             chats.push({
                 adPostId: adPostId,
                 adPostTitle: post.title,
-                recipient: userEmail
+                recipient: message.sender
             });
         }
         res.status(200).send(chats);
@@ -87,6 +88,7 @@ router.get("/chats/:userEmail", async (req, res) => {
     }
 });
 
+//Get all convos in database
 router.get("/", async (req, res) => {
     try {
         Message.find({}).then(data => {
