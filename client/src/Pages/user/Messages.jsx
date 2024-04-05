@@ -15,7 +15,7 @@ function Messages() {
     const [messages, setMessages] = useState([]);
     const [message, setMessage] = useState("");
 
-    //Fetches Chats
+    //Fetches Convos
     useEffect(() => {
         async function getChats() {
             await axios
@@ -38,11 +38,12 @@ function Messages() {
         const getMessages = async () => {
             // const recipient = user.email !== currentChat.recipient ? currentChat.recipient : user.email
             axios
-                .get(url + 
+                .get(
+                    url +
                     `/message/messages/${currentChat.adPostId}/${user.email}/${currentChat.recipient}`
                 )
                 .then((res) => {
-                    setMessages(res.data)
+                    setMessages(res.data);
                 });
         };
         if (currentChat && user) {
@@ -104,8 +105,10 @@ function Messages() {
                             onClick={() => setCurrentChat(chat)}
                         >
                             <Text fontWeight="bold">{chat.adPostTitle}</Text>
-                            <Text>{chat.recipient}</Text>
-                            {chat.sender}
+                            <Text>
+                                From:{" "}
+                                {chat.recipient === user.email ? chat.sender : chat.recipient}
+                            </Text>
                         </Box>
                     )
                 )}
@@ -118,23 +121,38 @@ function Messages() {
                         <Text fontWeight="bold" style={{ textAlign: "center" }}>
                             {currentChat.name}
                         </Text>
-                        <Box style={{ height: "calc(100vh - 300px)", overflowY: "auto" }}>
+                        <Flex
+                            style={{ height: "calc(100vh - 300px)", overflowY: "auto" }}
+                            border={"1px black solid"}
+                            flexDir={"column"}
+                        >
                             {messages.map((message, index) => (
-                                <Box key={message._id} p={2} borderRadius="md">
+                                <Box
+                                    key={message._id}
+                                    p={2}
+                                    borderRadius="md"
+                                    w={"fit-content"}
+                                    ml={message.sender === user.email && "auto"}
+                                    backgroundColor={message.sender === user.email ? "rgb(12, 115, 250)" : "rgb(24, 153, 46)"}
+                                    color={"white"}
+                                    fontWeight={"bold"}
+                                    border={"1px black solid"}
+                                >
                                     {message.message}
                                 </Box>
                             ))}
-                        </Box>
+                        </Flex>
                         {/* The message box and send button */}
-                        <Box position="absolute" bottom="0" left="0" right="0" p={4}>
-                            <Flex>
+                        <Box position="absolute" bottom="0" left="0" right="0" p={4} marginInline={"0.3rem"} marginBottom={"0.3rem"}>
+                            <Flex gap={"0.5rem"}>
                                 <Input
-                                    flex="1"
+                                    flex={8}
                                     value={message}
                                     onChange={(e) => setMessage(e.target.value)}
                                     placeholder="Type your message..."
                                 />
                                 {/* <Button colorScheme="blue" ml={2} onClick={handleSendMessage}>Send</Button> */}
+                                <Button flex={1}>Send</Button>
                             </Flex>
                         </Box>
                     </VStack>
