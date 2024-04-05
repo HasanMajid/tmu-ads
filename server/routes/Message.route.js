@@ -3,9 +3,11 @@ const router = express.Router()
 const mongoose = require('mongoose'); //Import mongoDB
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const [, Post] = require('./AdPost.route');
 
 const messageSchema = new mongoose.Schema({
-    adPostID: String,
+    adPostId: String,
+    adPostTitle: String,
     sender: String,
     recipient: String,
     message: String,
@@ -15,12 +17,12 @@ const Message = mongoose.model('Message', messageSchema);
 
 
 router.post("/", async (req, res) => {
-    const { adPostID, sender, recipient, message } = req.body;
+    const { adPostId, adPostTitle, sender, recipient, message } = req.body;
+    console.log("Message:", adPostId, adPostTitle, sender, recipient, message)
 
     try {
-        const newMessage = new Message({ adPostID, sender, recipient, message });
-        await newMessage.save();
-
+        const newMessage = new Message({ adPostId, adPostTitle, sender, recipient, message });
+        newMessage.save();
         res.status(200).send({ message: 'Message sent successfully' });
     } catch (err) {
         console.log(err)
@@ -28,24 +30,66 @@ router.post("/", async (req, res) => {
     }
 })
 
-
-router.get("/:adPostID/:sender/:recipient", async (req, res) => {
-    const { adPostID, sender, recipient } = req.params;
+// Fetches Messages
+router.get("/messages/:adPostId/:sender/:recipient", async (req, res) => {
+    const { adPostId, sender, recipient } = req.params;
+    console.log(adPostId, sender, recipient);
 
     try {
-        const messages = await Message.find({ 
-            adPostID, 
+        const messages = await Message.find({
+            adPostId,
             $or: [
                 { sender: sender, recipient: recipient },
                 { sender: recipient, recipient: sender }
-            ] 
+            ]
         }).sort({ timestamp: 1 });
-
+        console.log(messages);
         res.status(200).send(messages);
     } catch (err) {
         console.log(err)
         res.status(500).send({ error: 'Error fetching messages' });
     }
 })
+
+// Fetches Chats
+router.get("/chats/:userEmail", async (req, res) => {
+    const { userEmail } = req.params;
+
+    try {
+        const chats = [];
+        const adPostIds = await Message.distinct('adPostId', {
+            $or: [
+                { sender: userEmail },
+                { recipient: userEmail }
+            ]
+        });
+        for (let adPostId of adPostIds) {
+            const post = await Post.findOne({ _id: adPostId });
+            chats.push({
+                adPostId: adPostId,
+                adPostTitle: post.title,
+                recipient: post.userEmail
+            });
+        }
+        res.status(200).send(chats);
+    } catch (err) {
+        console.log(err);
+        res.status(500).send({ error: 'Error fetching chats' });
+    }
+});
+
+router.get("/", async (req, res) => {
+    try {
+        Message.find({}).then(data => {
+            res.json(data)
+        }).catch(err => {
+            res.status(408).json({ message: err.message })
+        })
+    } catch (err) {
+        console.log(err)
+        res.status(500).send({ error: 'Error fetching messages' });
+    }
+})
+
 
 module.exports = router;

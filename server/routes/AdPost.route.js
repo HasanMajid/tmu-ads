@@ -97,7 +97,7 @@ router.get("/search/:search/:type", async (req, res) => {
     }
 })
 
-module.exports = router;
+module.exports = [router, Post];
 
 
 

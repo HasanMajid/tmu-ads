@@ -10,7 +10,7 @@ require('dotenv').config();
 const { MongoClient, ServerApiVersion } = require('mongodb');
 
 const userRoute = require("./routes/User.route");
-const adPostRoute = require("./routes/AdPost.route");
+const [adPostRoute] = require("./routes/AdPost.route");
 const messageRoute = require("./routes/Message.route");
 
 // Middleware to parse JSON requests
@@ -32,6 +32,22 @@ app.use((req, res, next) => {
     res.io = io;
     next();
 });
+
+io.on('connection', (socket) => {
+    socket.on('joinRoom', ({ sender, recipient }) => {
+        const roomName = createRoomName(sender, recipient);
+        socket.join(roomName);
+    });
+
+    socket.on('sendMessage', ({ sender, recipient, message }) => {
+        const roomName = createRoomName(sender, recipient);
+        io.to(roomName).emit('message', message);
+    });
+});
+
+function createRoomName(user1, user2) {
+    return [user1, user2].sort().join('-');
+}
 
 let uri;
 console.log(process.env.NODE_ENV);
