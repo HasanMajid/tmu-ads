@@ -42,27 +42,25 @@ function AdCard({ adPost, setAds }) {
   }
 
   const handleSendMessage = async (e) => {
-    console.log("Sending message to:", user.id);
-    console.log("SEND MSG TEST", user.email, adPost.userEmail, message, adPost._id);
-    
-    try {
-      await axios.
-      post(url + '/message', {
-        senderId: user.email,
-        recipientId: adPost.userEmail,
-        adId: adPost.id,
-        message: message
-      });
+    console.log("SEND MSG TEST", adPost._id, user.email, adPost.userEmail, message, adPost.title);
 
-      console.log("Message sent successfully");
-      alert("Message sent!");
-      console.log(message)
-      setMessage('');
-    } catch (err) {
-      alert("Error sending message");
-      console.log("Error sending message", err);
-    }
-  };
+
+    await axios.
+      post(url + '/message', {
+        adPostId: adPost._id,
+        sender: user.email,
+        recipient: adPost.userEmail,
+        message: message
+      }).then(() => {
+        console.log("Message sent successfully");
+        alert("Message sent!");
+        console.log(message)
+        setMessage('');
+      }).catch((err) => {
+        alert("Error sending message");
+        console.log("Error sending message", err);
+      })
+  }
 
 
   if (!adPost) {
@@ -91,7 +89,11 @@ function AdCard({ adPost, setAds }) {
 
       <Stack>
         <CardBody>
-          <Heading size="lg">{adPost?.title}</Heading>
+          {(user && user?.email !== adPost.userEmail) ? 
+            <Heading size="lg">{adPost?.title}</Heading> : 
+            <Heading size="lg" color={"teal"} >{adPost?.title}</Heading>
+          }
+    
           <p>{adPost?.userEmail}</p>
 
           <Text py="2">{adPost?.content}</Text>
@@ -107,20 +109,22 @@ function AdCard({ adPost, setAds }) {
           </Box>
         </CardBody>
 
-        <CardFooter>
-          <Input
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder="Type your message here..."
-            size="md"
-          />
-          <Button variant="solid" colorScheme="blue" onClick={handleSendMessage}>
-            Message
-          </Button>
-        </CardFooter>
-        
+          {(user && user?.email !== adPost.userEmail) && 
+            <CardFooter>
+              <Input
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                placeholder="Type your message here..."
+                size="md"
+                />
+              <Button variant="solid" colorScheme="blue" onClick={handleSendMessage}>
+                Message
+              </Button>
+            </CardFooter>
+          }
+
       </Stack>
-        {(admin || user?.email === adPost.userEmail) && <CloseButton onClick={handleDeletePost} />}
+      {(admin || user?.email === adPost.userEmail) && <CloseButton onClick={handleDeletePost} />}
     </Card>
   );
 }

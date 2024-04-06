@@ -33,7 +33,7 @@ router.post("/", async (req, res) => {
 // Fetches Messages
 router.get("/messages/:adPostId/:sender/:recipient", async (req, res) => {
     const { adPostId, sender, recipient } = req.params;
-    console.log("Fetching Chat messag",adPostId, sender, recipient);
+    console.log("Fetching Chat messag", adPostId, sender, recipient);
 
     try {
         const messages = await Message.find({
@@ -43,7 +43,6 @@ router.get("/messages/:adPostId/:sender/:recipient", async (req, res) => {
                 { sender: recipient, recipient: sender }
             ]
         }).sort({ timestamp: 1 });
-        console.log(messages);
         res.status(200).send(messages);
     } catch (err) {
         console.log(err)
@@ -57,29 +56,47 @@ router.get("/chats/:userEmail", async (req, res) => {
 
     try {
         const chats = [];
+
+        //Get all adPostIds with the given sender email
         let adPostIds = await Message.distinct('adPostId', {
-            sender: userEmail 
+            sender: userEmail
         });
+        console.log("AdPostId as sender",adPostIds);
+
         for (let adPostId of adPostIds) {
+            if (adPostIds.includes(adPostId)) continue;
             const post = await Post.findOne({ _id: adPostId });
-            chats.push({
-                adPostId: adPostId,
-                adPostTitle: post.title,
-                recipient: post.userEmail,
-            });
+            if (userEmail !== post.userEmail) {
+                chats.push({
+                    adPostId: adPostId,
+                    adEmail: post.userEmail,
+                    adPostTitle: post.title,
+                    recipient: post.userEmail,
+                });
+            }
         }
 
-        adPostIds = await Message.distinct('adPostId', {
-            recipient: userEmail 
+        //Get all adPostIds with the given recipient email
+        //Note: As a recipient, you can have multiple chats for the same Post
+        const adPostIds2 = await Message.distinct('adPostId', {
+            recipient: userEmail
         });
-        for (let adPostId of adPostIds) {
+
+        // const messages = await Message.find({ recipient: userEmail });
+        // const adPostIds2 = messages.map(message => message.adPostId);
+        // console.log("AdPostId as recipient",adPostIds);
+
+        for (let adPostId of adPostIds2) {
             const post = await Post.findOne({ _id: adPostId });
             const message = await Message.findOne({ adPostId: adPostId, recipient: userEmail });
-            chats.push({
-                adPostId: adPostId,
-                adPostTitle: post.title,
-                recipient: message.sender
-            });
+            if (userEmail !== message.sender) {
+                chats.push({
+                    adPostId: adPostId,
+                    adEmail: post.userEmail,
+                    adPostTitle: post.title,
+                    recipient: message.sender
+                });
+            }
         }
         res.status(200).send(chats);
     } catch (err) {

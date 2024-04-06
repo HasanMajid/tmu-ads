@@ -4,16 +4,15 @@ import axios from "axios";
 import { url } from "../../utils/constants";
 import { useContext } from "react";
 import { UserContext } from "../../context/UserContext";
-import ChatContextProvider from "../../context/ChatContext";
 
 function Messages() {
     const { user } = useContext(UserContext);
     //Some data for testing functionality, you can delete this once you can access database
     const [chats, setChats] = useState([]);
 
-    const [currentChat, setCurrentChat] = useState(null);
+    const [currentChat, setCurrentChat] = useState(null);  // chat contains: recipient, adPostId, adPostTitle
     const [messages, setMessages] = useState([]);
-    const [message, setMessage] = useState("");
+    const [message, setMessage] = useState(null);
 
     //Fetches Convos
     useEffect(() => {
@@ -21,7 +20,7 @@ function Messages() {
             await axios
                 .get(url + `/message/chats/${user.email}`)
                 .then((res) => {
-                    console.log(res.data);
+                    console.log("chats", res.data);
                     setChats(res.data);
                 })
                 .catch((err) => {
@@ -51,40 +50,26 @@ function Messages() {
         }
     }, [currentChat, user]);
 
-    // const handleSendMessage = async (e) => {
-    //     // Check if message sent
-    //     console.log("Trying to send message in convo");
-
-    //     // try {
-    //     //     await axios.post(url + "/message", {
-    //     //         convoid: current_convo,
-    //     //         message: message,
-    //     //     });
-    //     //     console.log("Message sent successfully in convoid: ", current_convo);
-    //     //     console.log(message);
-    //     //     setMessage("");
-    //     // } catch (err) {
-    //     //     alert("Error sending message in convo.");
-    //     //     console.log("Error sending message", err);
-    //     // }
-
-    //     await axios.
-    //         post(url + '/message', {
-    //             adPostId: adPost._id,
-    //             adPostTitle: adPost.title,
-    //             sender: user.email,
-    //             recipient: adPost.userEmail,
-    //             message: message
-    //         }).then(() => {
-    //             console.log("Message sent successfully");
-    //             alert("Message sent!");
-    //             console.log(message)
-    //             setMessage('');
-    //         }).catch((err) => {
-    //             alert("Error sending message");
-    //             console.log("Error sending message", err);
-    //         })
-    // };
+    const handleSendMessage = async (e) => {
+        // Check if message sent
+        console.log("Trying to send message in convo");
+        if (!message) {return}
+        await axios.
+            post(url + '/message', {
+                adPostId: currentChat.adPostId,
+                sender: user.email,
+                recipient: currentChat.recipient,
+                message: message
+            }).then(() => {
+                console.log("Message sent successfully");
+                alert("Message sent!");
+                console.log(message)
+                setMessage(null);
+            }).catch((err) => {
+                alert("Error sending message");
+                console.log("Error sending message", err);
+            })
+    };
 
     return (
         <Flex>
@@ -104,9 +89,10 @@ function Messages() {
                             _hover={{ bg: "gray.100" }}
                             onClick={() => setCurrentChat(chat)}
                         >
-                            <Text fontWeight="bold">{chat.adPostTitle}</Text>
+                            {(user.email === chat.adEmail) ? <Text fontWeight="bold" color={'teal'}>{chat.adPostTitle}</Text> :
+                                <Text fontWeight="bold"> {chat.adPostTitle}</Text>
+                            }
                             <Text>
-                                From:{" "}
                                 {chat.recipient === user.email ? chat.sender : chat.recipient}
                             </Text>
                         </Box>
@@ -132,6 +118,7 @@ function Messages() {
                                     p={2}
                                     borderRadius="md"
                                     w={"fit-content"}
+                                    margin={"0.25rem"}
                                     ml={message.sender === user.email && "auto"}
                                     backgroundColor={message.sender === user.email ? "rgb(12, 115, 250)" : "rgb(24, 153, 46)"}
                                     color={"white"}
@@ -152,7 +139,7 @@ function Messages() {
                                     placeholder="Type your message..."
                                 />
                                 {/* <Button colorScheme="blue" ml={2} onClick={handleSendMessage}>Send</Button> */}
-                                <Button flex={1}>Send</Button>
+                                <Button flex={1} onClick={handleSendMessage}>Send</Button>
                             </Flex>
                         </Box>
                     </VStack>
