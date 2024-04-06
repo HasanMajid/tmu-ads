@@ -62,9 +62,9 @@ function Messages() {
                 message: message
             }).then(() => {
                 console.log("Message sent successfully");
+                setMessage("");
                 alert("Message sent!");
                 console.log(message)
-                setMessage(null);
             }).catch((err) => {
                 alert("Error sending message");
                 console.log("Error sending message", err);
